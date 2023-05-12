@@ -11,11 +11,12 @@ namespace ATM
         static void Main(string[] args)
         {
             string password;
-            int userMoney;
+            float userMoney;
             int count = 3;
+            bool isLineText = true;
 
-            Console.WriteLine($"У вас {count} попыток");
-            Console.Write("Введите ваш пароль: ");
+            CustomeText($"У вас {count} попыток", isLineText);
+            CustomeText("Введите ваш пароль: ");
 
             for (int i = 0; i < count; i++)
             {
@@ -23,16 +24,16 @@ namespace ATM
 
                 if (password == "0101")
                 {
-                    Console.Write("Введите сумму: ");
-                    userMoney = Convert.ToInt32(Console.ReadLine());
+                    CustomeText("Введите сумму: ");
+                    userMoney = Convert.ToSingle(Console.ReadLine());
                     new ATM(userMoney, password);
                     new Operations(userMoney, password).Menu();
                     return;
                 }
                 else
                 {
-                    Console.WriteLine($"Вы ввели не корректную пароль у вас осталось {count - (i + 1)} попыток");
-                    Console.Write("Введите ваш пароль: ");
+                    CustomeText($"Вы ввели не корректную пароль у вас осталось {count - (i + 1)} попыток", isLineText);
+                    CustomeText("Введите ваш пароль: ");
                 }
 
 
@@ -41,14 +42,27 @@ namespace ATM
 
         }
 
+        static void CustomeText(string text, bool isLine = false)
+        {
+            if (!isLine)
+            {
+
+                Console.Write(text);
+            }
+            else
+            {
+                Console.WriteLine(text);
+            }
+        }
+
     }
     class ATM
     {
-        protected int UserMoney;
+        protected float UserMoney;
         protected string Password;
         protected bool IsOpen = true;
 
-        public ATM(int userMoney, string password)
+        public ATM(float userMoney, string password)
         {
             UserMoney = userMoney;
             Password = password;
@@ -73,7 +87,7 @@ namespace ATM
     class Operations : ATM
     {
 
-        public Operations(int userMoney, string password) : base(userMoney, password) { }
+        public Operations(float userMoney, string password) : base(userMoney, password) { }
 
         public void Menu()
         {
@@ -104,14 +118,15 @@ namespace ATM
 
         public void MenuOperation(string numberOfOperations)
         {
+            bool isLineText = true;
 
             switch (numberOfOperations)
             {
                 case "1":
-                    CustomText($"У вас на счету: {UserMoney} денег", true);
+                    CustomText($"У вас на счету: {UserMoney} денег", isLineText);
                     CustomText("Сколько вы хотите перевести денег: ");
 
-                    int moneyTransfer = Convert.ToInt32(Console.ReadLine());
+                    float moneyTransfer = Convert.ToSingle(Console.ReadLine());
 
                     if (moneyTransfer < 0 || moneyTransfer > UserMoney)
                     {
@@ -120,7 +135,7 @@ namespace ATM
                     else
                     {
                         UserMoney -= moneyTransfer;
-                        CustomText($"Вы перевели {moneyTransfer} у вас осталось на счету {UserMoney}", true);
+                        CustomText($"Вы перевели {moneyTransfer} у вас осталось на счету {UserMoney}", isLineText);
                         CustomText("Чтоб родолжить нажмите на любую клавишу: ");
                     }
                     break;
@@ -135,7 +150,7 @@ namespace ATM
 
                     if (isValidPassword == Password)
                     {
-                        CustomText("Пароль подвержден", true);
+                        CustomText("Пароль подвержден", isLineText);
                         CustomText("Введите новый пароль, не больше 4 символов: ");
                         newPassword = Console.ReadLine();
 
@@ -146,49 +161,49 @@ namespace ATM
                         }
                         else
                         {
-                            CustomText("Вы ввели больше или меньше чем 4 символов", true);
+                            CustomText("Вы ввели больше или меньше чем 4 символов", isLineText);
                         }
                     }
                     else
                     {
-                        CustomText("Попробуйте снова", true);
+                        CustomText("Попробуйте снова", isLineText);
                     }
                     break;
 
                 case "3":
-                    int cashOut;
+                    float cashOut;
 
-                    CustomText($"У вас на счету {UserMoney} денег", true);
+                    CustomText($"У вас на счету {UserMoney} денег", isLineText);
                     CustomText("Сколько вы хотите обноличить: ");
 
-                    cashOut = Convert.ToInt32(Console.ReadLine());
+                    cashOut = Convert.ToSingle(Console.ReadLine());
 
                     if (cashOut > 0 && cashOut <= UserMoney)
                     {
                         UserMoney -= cashOut;
-                        CustomText($"Вы перевели {cashOut}, у вас на счету осталось {UserMoney} денег", true);
+                        CustomText($"Вы перевели {cashOut}, у вас на счету осталось {UserMoney} денег", isLineText);
                     }
                     else
                     {
-                        CustomText("У вас не достаточно средств чтобы выполнить эту операцию", true);
+                        CustomText("У вас не достаточно средств чтобы выполнить эту операцию", isLineText);
                     }
                     break;
 
                 case "4":
-                    int depositMoney;
+                    float depositMoney;
 
                     CustomText("Введите сумму: ");
 
-                    depositMoney = Convert.ToInt32(Console.ReadLine());
+                    depositMoney = Convert.ToSingle(Console.ReadLine());
 
                     if (depositMoney > 0)
                     {
                         UserMoney += depositMoney;
-                        CustomText($"Вы внесли {depositMoney}, у вас на счету {UserMoney} денег", true);
+                        CustomText($"Вы внесли {depositMoney}, у вас на счету {UserMoney} денег", isLineText);
                     }
                     else
                     {
-                        CustomText("Вы ввели не корректную сумму", true);
+                        CustomText("Вы ввели не корректную сумму", isLineText);
                     }
                     break;
 
@@ -197,11 +212,9 @@ namespace ATM
                     break;
 
                 default:
-                    CustomText("Вы выбрали не правильную операцию", true);
+                    CustomText("Вы выбрали не правильную операцию", isLineText);
                     break;
             }
         }
     }
-
-
 }
