@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ATM
 {
@@ -61,6 +59,7 @@ namespace ATM
         protected float UserMoney;
         protected string Password;
         protected bool IsOpen = true;
+        protected bool isLineText = true;
 
         public ATM(float userMoney, string password)
         {
@@ -96,14 +95,14 @@ namespace ATM
 
             while (IsOpen)
             {
-                CustomText(new String('=', 40), true);
-                CustomText("Добро пожаловать в меню\n", true);
-                CustomText($"Денег на счету: {UserMoney}\n", true);
+                CustomText(new String('=', 40), isLineText);
+                CustomText("Добро пожаловать в меню\n", isLineText);
+                CustomText($"Денег на счету: {UserMoney}\n", isLineText);
                 for (int i = 0; i < menuTitles.Count; i++)
                 {
-                    CustomText($"{i + 1} - {menuTitles[i]}\n", true);
+                    CustomText($"{i + 1} - {menuTitles[i]}\n", isLineText);
                 }
-                CustomText(new String('=', 40), true);
+                CustomText(new String('=', 40), isLineText);
 
                 CustomText("Выберите номер для операций: ");
                 numberOfOperations = Console.ReadLine();
@@ -118,8 +117,6 @@ namespace ATM
 
         public void MenuOperation(string numberOfOperations)
         {
-            bool isLineText = true;
-
             switch (numberOfOperations)
             {
                 case "1":
@@ -150,7 +147,7 @@ namespace ATM
 
                     if (isValidPassword == Password)
                     {
-                        CustomText("Пароль подвержден", isLineText);
+                        CustomText("Пароль подтвержден", isLineText);
                         CustomText("Введите новый пароль, не больше 4 символов: ");
                         newPassword = Console.ReadLine();
 
@@ -203,7 +200,7 @@ namespace ATM
                     }
                     else
                     {
-                        CustomText("Вы ввели не корректную сумму", isLineText);
+                        CustomText("Вы ввели некорректную сумму", isLineText);
                     }
                     break;
 
